@@ -47,13 +47,22 @@
 		var vertices1;
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight;
-		var particle_size = 0.01;
-		THREE.Cache.enabled = false;
+		var particle_size = 5;
+		THREE.Cache.enabled = true;
         var loader = new THREE.FileLoader();
-		loader.load('https://raw.githubusercontent.com/jobi2122/datastorage/master/fluid.csv', function (data) {
+		// loader.setRequestHeader({'Access-Control-Allow-Origin': '*'});
+		// loader.setRequestHeader({'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS'});
+		// loader.setRequestMethod('GET');
+		// loader.setRequestHeader('Content-Type : text/csv');
+		// loader.setRequestHeader({'Request Method' : 'GET'});
+		// loader.setRequestHeader('Access-Control-Max-Age: 1000');
+		// loader.setRequestHeader('Access-Control-Allow-Credentials: true ');
+		// loader.setRequestHeader('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+		
+		loader.load('https://s3.eu-central-1.amazonaws.com/dive.webprototype/fluid.csv', function (data) {
 
-			camera = new THREE.PerspectiveCamera( 60, WIDTH / HEIGHT, 0.1, 10000 );
-			camera.position.set(0,0,1);
+			camera = new THREE.PerspectiveCamera( 60, WIDTH / HEIGHT, 0.1, 1000000 );
+			camera.position.set(20,20,20);
 			scene = new THREE.Scene();
 			
 			pointGeometry = new THREE.Geometry();
@@ -75,7 +84,8 @@
 				);
 			};
     		pointGeometry.vertices = positions;
-
+			console.log(positions);
+			console.log(velocities);
 			var positions = new Float32Array( pointGeometry.vertices.length * 3 );
 			var colors = new Float32Array( pointGeometry.vertices.length * 3 );
 			var sizes = new Float32Array( pointGeometry.vertices.length );
