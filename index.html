@@ -47,7 +47,9 @@
 		var vertices1;
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight;
-		var particle_size = 5; // 0.01 for github Dambreak (see loader)
+		var particle_size = 1.4; // 0.01 for github Dambreak (see loader)
+		var colormap_min = -15;  // min for Lookup Table [m/s]
+		var colormap_max = 15;   // max for Lookup Table [m/s]
 		THREE.Cache.enabled = true;
         var loader = new THREE.FileLoader();
 		// loader.load('https://raw.githubusercontent.com/jobi2122/datastorage/master/fluid.csv', function (data) {
@@ -84,13 +86,15 @@
 			var vertex;
 			var color = new THREE.Color();
 
-			var lut = new THREE.Lut("rainbow", 10);
+			var lut = new THREE.Lut("rainbow", 255);
+			lut.setMax(colormap_max);
+			lut.setMin(colormap_min);
 			
 			for ( var i = 0; i < pointGeometry.vertices.length; i ++ ) {
 				vertex = pointGeometry.vertices[ i ];
 				vertex.toArray( positions, i * 3 );
 				// color.setHSL( 0.6, 1, velocities[10].x / 2.8 );
-				color = lut.getColor(-velocities[i].x);
+				color = lut.getColor(velocities[i].x);
 				color.toArray( colors, i * 3 );
     	    }
 			var geometry = new THREE.BufferGeometry();
