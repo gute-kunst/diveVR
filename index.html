@@ -47,14 +47,17 @@
 		var vertices1;
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight;
-		var particle_size = 0.005; // 0.01 for github Dambreak | 0.005 for gearbox | 0.1 for fluid
+		var particle_size = 0.05; // 0.01 for github Dambreak | 0.005 for gearbox | 0.1 for fluid
 		var colormap_min = -0.2;  // min for Lookup Table [m/s]
 		var colormap_max = 0.2;   // max for Lookup Table [m/s]
-		var filename = 'gearbox.csv' //     e.g fluid.csv , gearbox.csv
+		var filename = 'gearbox/gearbox_460.csv'       //  github datastorage
+		// var filename = 'propeller/propeller_400.csv'   //  github data storage
+		// var filename = 'fluid.csv'					   //  amazon S3 (don't use for testing) 
+
 		THREE.Cache.enabled = true;
         var loader = new THREE.FileLoader();
-		// loader.load('https://raw.githubusercontent.com/jobi2122/datastorage/master/fluid.csv', function (data) {
-		loader.load('https://s3.eu-central-1.amazonaws.com/dive.webprototype/' + filename, function (data) {
+		loader.load('https://raw.githubusercontent.com/jobi2122/datastorage/master/' + filename, function (data) {
+		// loader.load('https://s3.eu-central-1.amazonaws.com/dive.webprototype/' + filename, function (data) {
 
 			camera = new THREE.PerspectiveCamera( 60, WIDTH / HEIGHT, 0.01, 1000);
 			// camera.position.set(-0.2,0,0);  // sets camera position to (x,y,z)
