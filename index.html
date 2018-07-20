@@ -47,13 +47,14 @@
 		var vertices1;
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight;
-		var particle_size = 0.05; // 0.01 for github Dambreak | 0.005 for gearbox | 0.1 for fluid
-		var colormap_min = -0.2;  // min for Lookup Table [m/s]
-		var colormap_max = 0.2;   // max for Lookup Table [m/s]
+		var particle_size = 0.01; // 0.01 for github Dambreak | 0.005 for gearbox | 0.1 for fluid
+		var colormap_min = 0;  // min for Lookup Table [m/s]
+		var colormap_max = 7;   // max for Lookup Table [m/s]
 		var filename = 'gearbox/gearbox_460.csv'       //  github datastorage
-		// var filename = 'propeller/propeller_400.csv'   //  github data storage
-		// var filename = 'fluid.csv'					   //  amazon S3 (don't use for testing) 
-
+		var filename = 'propeller/propeller_400.csv'   //  github data storage
+		//var filename = 'fluid.csv'					   //  amazon S3 (don't use for testing) 
+		// var filename = 'DB_Fluid.csv';
+		
 		THREE.Cache.enabled = true;
         var loader = new THREE.FileLoader();
 		loader.load('https://raw.githubusercontent.com/jobi2122/datastorage/master/' + filename, function (data) {
