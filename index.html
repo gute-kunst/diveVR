@@ -111,6 +111,10 @@
 				// color = lut.getColor(2);	
 				color.toArray( colors, i * 3 );
     	    }
+
+			//ColorMap
+			lut.setLegendOn[{layout:magnitude ,position:{x:5,y:5,z:5}, dimensions:{width:1,height:5}}]
+			
 			var geometry = new THREE.BufferGeometry();
 			geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 			geometry.addAttribute( 'ca', new THREE.BufferAttribute( colors, 3 ) );
@@ -156,17 +160,25 @@
 			object.geometry.computeBoundingSphere();
 			console.log(object.geometry.boundingSphere.center);        //calculate center of object 
 			var object_center = object.geometry.boundingSphere.center;
-			controls.target.set(object_center.x, object_center.y, object_center.z);		//set center as rotation center for trackball controls
+			controls.target.set(object_center.x, object_center.y, object_center.z);	
+			//set center as rotation center for trackball controls
+
+			var object_sphere = object.geometry.boundingSphere;
+			console.log(object_sphere);
+
+			//coordinate system --- The X axis is red. The Y axis is green. The Z axis is blue.
+			var axesHelper = new THREE.AxesHelper( 1 );
+            scene.add( axesHelper );
 
 			var geo = new THREE.PlaneBufferGeometry(5,5,5);
             var mat = new THREE.MeshBasicMaterial({ color: 0xbfbfbf, side: THREE.DoubleSide,transparent: true, opacity: 2, depthWrite: false });
             var plane = new THREE.Mesh(geo, mat);
-			plane.rotateX( - Math.PI / 2);
+			// plane.rotateX( - Math.PI / 2);
 			// plane.translateOnAxis( [1,0,0] , object_center.x);
 			// plane.translateOnAxis([0,1,0] , object_center.y);
 			// plane.translateOnAxis([0,0,1], object_center.z);
-			// plane.translateX(object_center.x);
-			// plane.translateY( object_center.y);
+			plane.translateX(object_center.x);
+			plane.translateY( object_center.y);
 			// plane.translateZ(object_center.z);
             scene.add(plane);
 
@@ -175,6 +187,9 @@
 			window.addEventListener( 'resize', onWindowResize, false );
 			animate();
 
+	
+			
+
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
@@ -182,6 +197,8 @@
 				console.log(camera.position)
 				
 			}
+
+			
 
 			function animate() {
 				requestAnimationFrame( animate );
@@ -192,7 +209,7 @@
 			function render() {
 				var time = Date.now() * 0.01;
 				controls.update();
-				// object.rotatikon.y = object.rotation.z = 0.01 * time;
+				//  camera.rotation.z = 0.1 * time;
 				renderer.render( scene, camera );
 			}
 		},
