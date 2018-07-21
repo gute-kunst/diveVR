@@ -49,12 +49,12 @@
 		var WIDTH = window.innerWidth;
 		var HEIGHT = window.innerHeight;
 		var particle_size = 0.03; // 0.01 for github Dambreak | 0.005 for gearbox | 0.1 for fluid | propeller = 0.01
-		var colormap_min = -1;  // min for Lookup Table [m/s]
-		var colormap_max = 1;   // max for Lookup Table [m/s]
+		var colormap_min = 0;  // min for Lookup Table [m/s]
+		var colormap_max = 2.7;   // max for Lookup Table [m/s]
 		// var filename = 'gearbox/gearbox_460.csv'       //  github datastorage
-		var filename = 'propeller/propeller_400.csv'   //  github data storage
+		// var filename = 'propeller/propeller_400.csv'   //  github data storage
 		// var filename = 'fluid.csv'					   //  amazon S3 (don't use for testing) 
-
+		var filename = 'propeller/propeller_reduced.csv'
 		THREE.Cache.enabled = true;
         var loader = new THREE.FileLoader();
 		loader.load('https://raw.githubusercontent.com/jobi2122/datastorage/master/' + filename, function (data) {
@@ -104,7 +104,11 @@
 				vertex = pointGeometry.vertices[ i ];
 				vertex.toArray( positions, i * 3 );
 				// color.setHSL( 0.6, 1, velocities[10].x / 2.8 );
-				color = lut.getColor(velocities[i].x);
+				// var x_value = velocities[i].x
+				var magnitude = Math.sqrt(Math.abs((velocities[i].x)^2 + (velocities[i].y)^2 + (velocities[i].z)^2))
+				color = lut.getColor(magnitude);
+				// console.log(magnitude)
+				// color = lut.getColor(2);	
 				color.toArray( colors, i * 3 );
     	    }
 			var geometry = new THREE.BufferGeometry();
@@ -129,6 +133,9 @@
 			object = new THREE.Points( geometry, material );
 			scene.add( object );
 
+			 //2D Plane  
+
+
 			renderer = new THREE.WebGLRenderer({antialias: true});
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( WIDTH, HEIGHT );
@@ -149,8 +156,19 @@
 			object.geometry.computeBoundingSphere();
 			console.log(object.geometry.boundingSphere.center);        //calculate center of object 
 			var object_center = object.geometry.boundingSphere.center;
-			controls.target.set(object_center.x, object_center.y, object_center.z);//set center as rotation center for trackball controls
+			controls.target.set(object_center.x, object_center.y, object_center.z);		//set center as rotation center for trackball controls
 
+			var geo = new THREE.PlaneBufferGeometry(5,5,5);
+            var mat = new THREE.MeshBasicMaterial({ color: 0xbfbfbf, side: THREE.DoubleSide,transparent: true, opacity: 2, depthWrite: false });
+            var plane = new THREE.Mesh(geo, mat);
+			plane.rotateX( - Math.PI / 2);
+			// plane.translateOnAxis( [1,0,0] , object_center.x);
+			// plane.translateOnAxis([0,1,0] , object_center.y);
+			// plane.translateOnAxis([0,0,1], object_center.z);
+			// plane.translateX(object_center.x);
+			// plane.translateY( object_center.y);
+			// plane.translateZ(object_center.z);
+            scene.add(plane);
 
 			stats = new Stats();
 			container.appendChild( stats.dom );
@@ -162,6 +180,7 @@
 				camera.updateProjectionMatrix();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				console.log(camera.position)
+				
 			}
 
 			function animate() {
