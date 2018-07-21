@@ -164,6 +164,25 @@
 			var object_center = object.geometry.boundingSphere.center;
 			controls.target.set(object_center.x, object_center.y, object_center.z);	
 			//set center as rotation center for trackball controls
+			
+			//Device Orientation
+			window.addEventListener('deviceorientation', setOrientationControls, true);		// aktiviert Orientation Controls vom Handy
+			function setOrientationControls(e) {
+  				if (!e.alpha) {
+   					 return;
+			  	}
+			  	controls = new THREE.DeviceOrientationControls(camera, true);
+				controls.connect();
+				controls.update();
+				element.addEventListener('click', fullscreen, false);
+				window.removeEventListener('deviceorientation', setOrientationControls, true);
+				effect = new THREE.StereoEffect(renderer); //StereoEffect
+
+			}
+
+			
+
+
 
 			var object_sphere = object.geometry.boundingSphere;
 			console.log(object_sphere);
@@ -190,17 +209,17 @@
 			animate();
 
 			// make fullscreen
-			THREEx.FullScreen.request	= function(element)
-			{
-				element	= element	|| document.body;
-				if( this._hasWebkitFullScreen ){
-					element.webkitRequestFullScreen();
-				}else if( this._hasMozFullScreen ){
-					element.mozRequestFullScreen();
-				}else{
-					console.assert(false);
-				}
-			}
+			function fullscreen() {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.msRequestFullscreen) {
+          container.msRequestFullscreen();
+        } else if (container.mozRequestFullScreen) {
+          container.mozRequestFullScreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
+      }
 
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
