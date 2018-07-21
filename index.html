@@ -11,6 +11,8 @@
 		<div id="container"></div>
 		<script src="three.js"></script>
 		<script src="Lut.js"></script>
+		<script src="StereoEffect.js"></script>
+		<script src="DeviceOrientationControls.js"></script>
 		<script src="OrbitControls.js"></script>
 		<script src = "TrackballControls.js"></script>
 		<script src="VTKLoader.js"></script>
@@ -113,7 +115,7 @@
     	    }
 
 			//ColorMap
-			lut.setLegendOn[{layout:magnitude ,position:{x:5,y:5,z:5}, dimensions:{width:1,height:5}}]
+			// lut.setLegendOn[{layout:magnitude ,position:{x:5,y:5,z:5}, dimensions:{width:1,height:5}}]
 			
 			var geometry = new THREE.BufferGeometry();
 			geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
@@ -187,8 +189,18 @@
 			window.addEventListener( 'resize', onWindowResize, false );
 			animate();
 
-	
-			
+			// make fullscreen
+			THREEx.FullScreen.request	= function(element)
+			{
+				element	= element	|| document.body;
+				if( this._hasWebkitFullScreen ){
+					element.webkitRequestFullScreen();
+				}else if( this._hasMozFullScreen ){
+					element.mozRequestFullScreen();
+				}else{
+					console.assert(false);
+				}
+			}
 
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
