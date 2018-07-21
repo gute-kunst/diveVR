@@ -45,7 +45,7 @@
 		</script>
 		<script> 
 		// if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-		var renderer, scene, camera, stats;
+		var renderer, scene, camera, stats, effect;
 		var object, uniforms, attributes;
 		var vertices1;
 		var WIDTH = window.innerWidth;
@@ -174,11 +174,18 @@
 			  	controls = new THREE.DeviceOrientationControls(camera, true);
 				controls.connect();
 				controls.update();
-				element.addEventListener('click', fullscreen, false);
+				renderer.domElement.addEventListener('click', fullscreen, false);
 				window.removeEventListener('deviceorientation', setOrientationControls, true);
 				effect = new THREE.StereoEffect(renderer); //StereoEffect
 
 			}
+			controls = new THREE.DeviceOrientationControls(camera, true);
+			controls.connect();
+			controls.update();
+			renderer.domElement.addEventListener('click', fullscreen, false);
+			window.removeEventListener('deviceorientation', setOrientationControls, true);
+			effect = new THREE.StereoEffect(renderer); //StereoEffect
+			effect.setSize(WIDTH, HEIGHT);
 
 			
 
@@ -241,7 +248,9 @@
 				var time = Date.now() * 0.01;
 				controls.update();
 				//  camera.rotation.z = 0.1 * time;
-				renderer.render( scene, camera );
+				// renderer.render( scene, camera );
+				effect.render(scene, camera);
+
 			}
 		},
     	    function ( xhr ) {console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );},
